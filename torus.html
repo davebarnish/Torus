@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Torus</title>
+ <script type="text/javascript" src="torus.js"></script>
+</head>
+  <body onload='start();'>
+
+    <h1>Torus of Life</h1>
+
+    <canvas id='glcanvas' width=320 height=240 onmousemove='mousing();' onmousedown='mdown=true; oldx=-1;' onmouseup='mdown=false;' onmouseleave='mdown=false;' >
+       Your browser may not support HTML5
+    </canvas>
+
+    <p>Click and drag to spin the torus.</p>
+    
+    <p>
+      <div style='display:inline-block;'>Mode in drawArrays:</div>
+      <div style='display:inline-block;'>
+        <select id='rendering'>
+          <option selected="selected">TRIANGLE_STRIP<option>LINE_STRIP
+          <option>POINTS<option>LINES<option>TRIANGLES<option>LINE_LOOP
+          <option>TRIANGLE_FAN
+        </select>
+      </div>      
+    </p>
+
+    <p>
+    <form name="Form1">
+	   POSX: <input type="text" name="posx"> POSY: <input type="text" name="posy"> DOWN: <input type="text" name="mdown"> 
+	</form>
+	<br/>
+      <div style='display:inline-block;'>Torus Radius:</div>
+      <div style='display:inline-block;'>
+        <select id='bradius' onchange='updateObject();'>
+          <option>1.0<option selected="selected">0.7<option>0.4<option>0.2
+        </select>
+      </div>
+    <br/>
+      <div style='display:inline-block;'>Torus interleave:</div>
+      <div style='display:inline-block;'>
+        <select id='interleave' onchange='updateObject();'>
+          <option selected="selected">1.0<option>0.7<option>0.4<option>0.2
+        </select>
+      </div>
+      <div style='display:inline-block;padding-left:0.2em;'>Section radius:</div>
+      <div style='display:inline-block;'>
+        <select id='sradius' onchange='updateObject();'>
+          <option>0.2<option selected="selected">0.3<option>0.7<option>0.9
+        </select>
+      </div>
+    <br/>
+      <div style='display:inline-block;padding-left:0.2em;'>#segments:</div>
+      <div style='display:inline-block;'>
+        <select id='numsegs' onchange='updateObject();'>
+          <option>2<option>3<option>7<option>15<option selected="selected">40
+        </select>
+      </div>
+      <div style='display:inline-block;padding-left:0.2em;'>#segments in section:</div>
+      <div style='display:inline-block;'>
+        <select id='numssegs' onchange='updateObject();'>
+          <option>2<option>3<option>7<option>15<option selected="selected">40
+        </select>
+      </div>
+    </p>
+
+    <p>
+      <div style='display:inline-block;'>OX:</div>
+      <div style='display:inline-block;'>
+        <select id='ox'>
+          <option>-1.0<option>-0.7<option>-0.3<option selected="selected">0
+          <option>+0.3<option>+0.7<option>+1.0
+        </select>
+      </div>
+      <div style='display:inline-block;padding-left:1em;'>OY:</div>
+      <div style='display:inline-block;'>
+        <select id='oy'>
+          <option>-1.0<option>-0.7<option>-0.3<option selected="selected">0
+          <option>+0.3<option>+0.7<option>+1.0
+        </select>
+      </div>
+      <div style='display:inline-block;padding-left:1em;'>OZ:</div>
+      <div style='display:inline-block;'>
+        <select id='oz'>
+          <option>-1.0<option>-0.7<option>-0.3<option selected="selected">0
+          <option>+0.3<option>+0.7<option>+1.0
+        </select>
+      </div>
+    <br/>
+      <div style='display:inline-block;'>RX:</div>
+      <div style='display:inline-block; width:1.5em;'id='ax'>0</div>
+      <div style='display:inline-block;'>
+        <select id='dx'>
+          <option>-2<option>-1<option selected="selected">0<option>+1<option>+2
+        </select>
+      </div>
+      <div style='display:inline-block;padding-left:0.3em;'>RY:</div>
+      <div style='display:inline-block; width:1.5em;'id='ay'>0</div>
+      <div style='display:inline-block;'>
+        <select id='dy'>
+          <option>-2<option>-1<option selected="selected">0<option>+1<option>+2
+        </select>
+      </div>
+      <div style='display:inline-block;padding-left:0.3em;'>RZ:</div>
+      <div style='display:inline-block; width:1.5em;'id='az'>0</div>
+      <div style='display:inline-block;'>
+        <select id='dz'>
+          <option>-2<option>-1<option selected="selected">0<option>+1<option>+2
+        </select>
+      </div>
+    <br/>
+      <div style='display:inline-block;'>Scaling:</div>
+      <div style='display:inline-block;'>
+        <select id='s'>
+          <option>1.5<option>1.0<option selected="selected">0.7<option>0.5<option>0.3
+        </select>
+      </div>
+      <div style='display:inline-block;padding-left:1em;'>Distance to camera:</div>
+      <div style='display:inline-block;'>
+        <select id='d'>
+          <option>0.5<option selected="selected">1.1<option>2.0
+          <option>5.0<option>100.0<option>-1.5
+        </select>
+      </div>
+    <br/>
+      <div style='display:inline-block;'>Near:</div>
+      <div style='display:inline-block;'>
+        <select id='n'>
+          <option>0.5<option>0.0<option>-0.5<option selected="selected">-1.0<option>-2.0
+        </select>
+      </div>
+      <div style='display:inline-block;padding-left:0.2em;'>Far:</div>
+      <div style='display:inline-block;'>
+        <select id='f'>
+          <option>0.5<option selected="selected">1.0<option>2.5
+        </select>
+      </div>
+      <div style='display:inline-block;padding-left:0.2em;'>
+        <input type='checkbox' id='exz'>Exchange XZ</input>
+      </div>
+    </p>
+
+  </body>
+</html>
